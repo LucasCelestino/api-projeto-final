@@ -3,27 +3,29 @@ package com.hardware.api.Service;
 import java.util.List;
 import java.util.Optional;
 
-import com.hardware.api.DTO.UserDTO;
+import com.hardware.api.Model.User;
 import com.hardware.api.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class UserService implements ServiceInterface<UserDTO>
+@Service
+public class UserService implements ServiceInterface<User>
 {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public List<UserDTO> findAll()
+    public List<User> findAll()
     {
         return userRepository.findAll();
     }
 
     @Override
-    public UserDTO findById(Long id)
+    public User findById(Long id)
     {
-        Optional<UserDTO> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
 
         if(user.isPresent())
         {
@@ -34,28 +36,28 @@ public class UserService implements ServiceInterface<UserDTO>
     }
 
     @Override
-    public UserDTO create(UserDTO user)
+    public User create(User objUser)
     {
-        UserDTO newUser = userRepository.save(user);
+        User newUser = userRepository.save(objUser);
 
         return newUser;
     }
 
     @Override
-    public boolean update(UserDTO obj) 
+    public boolean update(User objUser) 
     {
-        Optional<UserDTO> user = userRepository.findById(obj.getId());
+        Optional<User> user = userRepository.findById(objUser.getId());
 
         if(user.isPresent())
         {
-            UserDTO userDTO = user.get();
+            User userUpdate = user.get();
 
-            userDTO.setNome(obj.getNome());
-            userDTO.setEmail(obj.getEmail());
-            userDTO.setPassword(obj.getPassword());
-            userDTO.setIsAdmin(obj.getIsAdmin());
+            userUpdate.setName(objUser.getName());
+            userUpdate.setEmail(objUser.getEmail());
+            userUpdate.setPassword(objUser.getPassword());
+            userUpdate.setIsAdmin(objUser.getIsAdmin());
 
-            userRepository.save(userDTO);
+            userRepository.save(userUpdate);
 
             return true;
         }

@@ -14,17 +14,17 @@ import lombok.Setter;
 @Table(name = "users")
 public class User extends AbstractEntity
 {
-    @Column(name = "name", nullable = false, length = 75)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 75)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 90)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "is_admin")
-    private Boolean isAdmin;
+    private Integer isAdmin;
 
     public String getName() {
         return this.name;
@@ -50,11 +50,11 @@ public class User extends AbstractEntity
         this.password = password;
     }
 
-    public Boolean getIsAdmin() {
+    public Integer getIsAdmin() {
         return this.isAdmin;
     }
 
-    public void setIsAdmin(Boolean isAdmin) {
+    public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
     }
 }

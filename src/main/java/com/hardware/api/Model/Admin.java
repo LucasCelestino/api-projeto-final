@@ -14,22 +14,14 @@ import lombok.Setter;
 @Table(name = "admins")
 public class Admin extends AbstractEntity
 {
-    @Column(name = "name", nullable = false, length = 75)
+    @Column(name = "name", length = 75)
     private String name;
 
-    @Column(name = "email", nullable = true, length = 75)
+    @Column(name = "email", length = 75)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 90)
+    @Column(name = "password", length = 90)
     private String password;
-
-    public Admin(Long id, String name, String email, String password)
-    {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
     public String getName() {
         return this.name;

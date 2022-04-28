@@ -1,10 +1,12 @@
 package com.hardware.api.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.hardware.api.DTO.AdminDTO;
+import com.hardware.api.Mapper.AdminMapper;
 import com.hardware.api.Model.Admin;
-import com.hardware.api.Repository.UserRepository;
+import com.hardware.api.Repository.AdminRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,77 +16,62 @@ public class AdminService implements ServiceInterface<AdminDTO>
 {
 
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private AdminMapper adminMapper;
 
     // @Override
-    // public List<User> findAll()
-    // {
-    //     return userRepository.findAll();
-    // }
+    public List<AdminDTO> findAll()
+    {
+        return adminMapper.toDTO(adminRepository.findAll());
+    }
 
     // @Override
     public AdminDTO findById(Long id)
     {
-        Optional<Admin> OptionalAdmin = userRepository.findById(id);
+        Optional<Admin> OptionalAdmin = adminRepository.findById(id);
 
         if(OptionalAdmin.isPresent())
         {
-            Admin admin = OptionalAdmin.get();
-
-            AdminDTO adminDTO = new AdminDTO();
-
-            adminDTO.setId(admin.getId());
-            adminDTO.setName(admin.getName());
-            adminDTO.setEmail(admin.getEmail());
-            adminDTO.setPassword(admin.getPassword());
-
-            return adminDTO;
+            return adminMapper.toDTO(OptionalAdmin.get());
         }
 
         return null;
     }
 
     // @Override
-    // public User create(User objUser)
-    // {
-    //     User newUser = userRepository.save(objUser);
+    public AdminDTO create(AdminDTO adminDTO)
+    {
+        Admin newAdmin = adminRepository.save(adminMapper.toEntity(adminDTO));
 
-    //     return newUser;
-    // }
-
-    // @Override
-    // public boolean update(User objUser) 
-    // {
-    //     Optional<User> user = userRepository.findById(objUser.getId());
-
-    //     if(user.isPresent())
-    //     {
-    //         User userUpdate = user.get();
-
-    //         userUpdate.setName(objUser.getName());
-    //         userUpdate.setEmail(objUser.getEmail());
-    //         userUpdate.setPassword(objUser.getPassword());
-    //         userUpdate.setIsAdmin(objUser.getIsAdmin());
-
-    //         userRepository.save(userUpdate);
-
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
+        return adminMapper.toDTO(newAdmin);
+    }
 
     // @Override
-    // public boolean delete(Long id)
-    // {
-    //     if(userRepository.existsById(id))
-    //     {
-    //         userRepository.deleteById(id);
+    public boolean update(AdminDTO adminDTO) 
+    {
+        if(adminRepository.existsById(adminDTO.getId()))
+        {
+            adminRepository.save(adminMapper.toEntity(adminDTO));
 
-    //         return  true;
-    //     }
+            return true;
+        }
 
-    //     return false;
-    // }
+        return false;
+    }
+
+    // @Override
+    public boolean delete(Long id)
+    {
+        if(adminRepository.existsById(id))
+        {
+            adminRepository.deleteById(id);
+            
+            return true;
+        }
+
+        return false;
+    }
     
 }

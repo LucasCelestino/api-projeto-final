@@ -1,9 +1,9 @@
 package com.hardware.api.Controller;
 
-import java.net.URISyntaxException;
-import java.util.List;
+// import java.net.URISyntaxException;
+// import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+// import org.springframework.http.ResponseEntity;
 
 public interface ControllerInterface<T>
 {

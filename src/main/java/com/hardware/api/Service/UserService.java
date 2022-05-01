@@ -3,13 +3,9 @@ package com.hardware.api.Service;
 import java.util.List;
 import java.util.Optional;
 
-import com.hardware.api.DTO.PartDTO;
 import com.hardware.api.DTO.UserDTO;
-import com.hardware.api.Mapper.PartMapper;
 import com.hardware.api.Mapper.UserMapper;
-import com.hardware.api.Model.Part;
 import com.hardware.api.Model.User;
-import com.hardware.api.Repository.PartRepository;
 import com.hardware.api.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

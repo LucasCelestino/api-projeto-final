@@ -1,6 +1,6 @@
 package com.hardware.api.Service;
 
-import java.util.List;
+// import java.util.List;
 
 public interface ServiceInterface<T>
 {

@@ -3,13 +3,10 @@ package com.hardware.api.Service;
 import java.util.List;
 import java.util.Optional;
 
-import com.hardware.api.DTO.AdminDTO;
 import com.hardware.api.DTO.BrandDTO;
-import com.hardware.api.Mapper.AdminMapper;
 import com.hardware.api.Mapper.BrandMapper;
-import com.hardware.api.Model.Admin;
 import com.hardware.api.Model.Brand;
-import com.hardware.api.Repository.AdminRepository;
+import com.hardware.api.Model.Part;
 import com.hardware.api.Repository.BrandRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,16 +1,14 @@
 package com.hardware.api.Model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-
 // import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 // import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +17,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "brands")
-public class Brand extends AbstractEntity
+@Table(name = "parts")
+public class Part extends AbstractEntity
 {
+    @ManyToOne
+    @JoinColumn(name = "id_brand")
+    private Brand brand;
+
     @Column(name = "name", length = 75)
     private String name;
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
-    private List<Part> parts;
+    @Column(name = "price")
+    private Double price;
+
+    @Column(name = "url", length = 200)
+    private String url;
 }

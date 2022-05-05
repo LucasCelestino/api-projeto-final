@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.hardware.api.DTO.AdminDTO;
 import com.hardware.api.DTO.BrandDTO;
-import com.hardware.api.Model.Part;
-import com.hardware.api.Service.AdminService;
 import com.hardware.api.Service.BrandService;
 
 import org.springframework.beans.factory.annotation.Autowired;

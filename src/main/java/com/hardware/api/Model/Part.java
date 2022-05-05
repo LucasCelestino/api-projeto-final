@@ -20,10 +20,6 @@ import lombok.Setter;
 @Table(name = "parts")
 public class Part extends AbstractEntity
 {
-    @ManyToOne
-    @JoinColumn(name = "id_brand")
-    private Brand brand;
-
     @Column(name = "name", length = 75)
     private String name;
 
@@ -32,4 +28,8 @@ public class Part extends AbstractEntity
 
     @Column(name = "url", length = 200)
     private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "id_brand", nullable = false)
+    private Brand brand;
 }

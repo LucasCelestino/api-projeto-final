@@ -30,14 +30,14 @@ public class UserController implements ControllerInterface<UserDTO>
     @Autowired
     private UserService userService; 
 
-    // @Override
+    @Override
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll()
     {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
-    // @Override
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         UserDTO userDTO = userService.findById(id);
@@ -50,7 +50,7 @@ public class UserController implements ControllerInterface<UserDTO>
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // @Override
+    @Override
     @PostMapping
     public ResponseEntity<UserDTO> post(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         
@@ -62,7 +62,6 @@ public class UserController implements ControllerInterface<UserDTO>
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
     }
 
-    // @Override
     @PutMapping("/{id}")
     public ResponseEntity<?> put(@Valid @RequestBody UserDTO dto, @PathVariable("id") Long id)
     {
@@ -82,7 +81,7 @@ public class UserController implements ControllerInterface<UserDTO>
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // @Override
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {

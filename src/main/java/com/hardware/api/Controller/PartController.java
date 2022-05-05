@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.hardware.api.DTO.BrandDTO;
 import com.hardware.api.DTO.PartDTO;
 import com.hardware.api.Service.PartService;
 
@@ -25,20 +24,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/parts")
-public class PartController implements ControllerInterface<BrandDTO>
+public class PartController implements ControllerInterface<PartDTO>
 {
 
     @Autowired
     private PartService partService; 
 
-    // @Override
+    @Override
     @GetMapping
     public ResponseEntity<List<PartDTO>> getAll()
     {
         return ResponseEntity.status(HttpStatus.OK).body(partService.findAll());
     }
 
-    // @Override
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         PartDTO partDTO = partService.findById(id);
@@ -51,7 +50,7 @@ public class PartController implements ControllerInterface<BrandDTO>
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // @Override
+    @Override
     @PostMapping
     public ResponseEntity<PartDTO> post(@Valid @RequestBody PartDTO partDTO) throws URISyntaxException {
         
@@ -63,7 +62,7 @@ public class PartController implements ControllerInterface<BrandDTO>
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
     }
 
-    // @Override
+
     @PutMapping("/{id}")
     public ResponseEntity<?> put(@Valid @RequestBody PartDTO dto, @PathVariable("id") Long id)
     {
@@ -82,7 +81,7 @@ public class PartController implements ControllerInterface<BrandDTO>
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // @Override
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {

@@ -55,10 +55,15 @@ public class BudgetController implements ControllerInterface<BudgetDTO>
 
         BudgetDTO dto = budgetService.create(budgetDTO);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId())
+        if(dto != null)
+        {
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId())
 				.toUri();
 
-        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @Override

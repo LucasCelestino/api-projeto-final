@@ -2,6 +2,7 @@ package com.hardware.api.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.hardware.api.DTO.BrandDTO;
 import com.hardware.api.DTO.PartDTO;
@@ -10,6 +11,8 @@ import com.hardware.api.Model.Part;
 import com.hardware.api.Repository.PartRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +31,19 @@ public class PartService implements ServiceInterface<BrandDTO>
         return partMapper.toDTO(partRepository.findAll());
     }
 
+    public Page<PartDTO> findAll(Pageable pageable)
+    {
+		Page<Part> parts = partRepository.findAll(pageable);
+		Page<PartDTO> dto = parts.map(new Function<Part, PartDTO>() {
+			
+			@Override
+			public PartDTO apply(Part conta) {
+				return partMapper.toDTO(conta);
+			}
+		});
+		return dto;
+	}
+
     // @Override
     public PartDTO findById(Long id)
     {
@@ -40,6 +56,18 @@ public class PartService implements ServiceInterface<BrandDTO>
 
         return null;
     }
+
+    // public List<PartDTO> findByBrand(String brand)
+    // {
+    //     List<Part> parts = partRepository.findByBrandName(brand);
+
+    //     if(parts.isEmpty())
+    //     {
+    //         return partMapper.toDTO(parts);
+    //     }
+
+    //     return null;
+    // }
 
     // @Override
     public PartDTO create(PartDTO partDTO)

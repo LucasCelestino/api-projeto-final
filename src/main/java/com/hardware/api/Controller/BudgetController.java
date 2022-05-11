@@ -6,7 +6,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 import com.hardware.api.DTO.BudgetDTO;
+import com.hardware.api.DTO.UserDTO;
 import com.hardware.api.Service.BudgetService;
+import com.hardware.api.Service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,10 @@ public class BudgetController implements ControllerInterface<BudgetDTO>
 {
 
     @Autowired
-    private BudgetService budgetService; 
+    private BudgetService budgetService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     @GetMapping
@@ -43,6 +48,26 @@ public class BudgetController implements ControllerInterface<BudgetDTO>
         if(budgetDTO != null)
         {
             return ResponseEntity.status(HttpStatus.OK).body(budgetDTO);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getByUser(@PathVariable("id") Long id)
+    {
+        UserDTO dto = userService.findById(id);
+
+        if(dto != null)
+        {
+            List<BudgetDTO> budgetDTO = budgetService.findByUser(dto);
+
+            if(budgetDTO != null)
+            {
+                return ResponseEntity.ok(budgetDTO);
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

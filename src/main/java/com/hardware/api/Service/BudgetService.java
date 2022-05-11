@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hardware.api.DTO.BudgetDTO;
+import com.hardware.api.DTO.UserDTO;
 import com.hardware.api.Mapper.BudgetMapper;
+import com.hardware.api.Mapper.UserMapper;
 import com.hardware.api.Model.Budget;
 import com.hardware.api.Repository.BudgetRepository;
 
@@ -20,6 +22,9 @@ public class BudgetService implements ServiceInterface<BudgetDTO>
 
     @Autowired
     private BudgetMapper budgetMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     // @Override
     public List<BudgetDTO> findAll()
@@ -38,6 +43,13 @@ public class BudgetService implements ServiceInterface<BudgetDTO>
         }
 
         return null;
+    }
+
+    public List<BudgetDTO> findByUser(UserDTO user)
+    {
+        List<Budget> optionalBudget = budgetRepository.findByUser(userMapper.toEntity(user));
+
+        return budgetMapper.toDTO(optionalBudget);
     }
 
     // @Override

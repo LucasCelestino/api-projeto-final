@@ -20,7 +20,7 @@ public class BudgetMapper
 
         budget.setId(budgetDTO.getId());
         budget.setUser(budgetDTO.getUser());
-        budget.setPart(budget.getPart());
+        budget.setPart(budgetDTO.getPart());
 
         return budget;
     }

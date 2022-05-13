@@ -9,6 +9,7 @@ import com.hardware.api.Model.User;
 import com.hardware.api.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,9 @@ public class UserService implements ServiceInterface<UserDTO>
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserMapper userMapper;
@@ -43,6 +47,8 @@ public class UserService implements ServiceInterface<UserDTO>
     // @Override
     public UserDTO create(UserDTO userDTO)
     {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        
         User newUser = userRepository.save(userMapper.toEntity(userDTO));
 
         return userMapper.toDTO(newUser);

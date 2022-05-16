@@ -20,10 +20,11 @@ public class UserMapper
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
         user.setPhone(userDTO.getPhone());
         user.setUrl(userDTO.getUrl());
-
+        user.setProfiles(userDTO.getProfiles());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(userDTO.getPassword());
         return user;
     }
 
@@ -33,9 +34,11 @@ public class UserMapper
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
         userDTO.setPhone(user.getPhone());
         userDTO.setUrl(user.getUrl());
+        userDTO.setProfiles(user.getProfilesAsInteger());
+        userDTO.setLogin(user.getLogin());
+        userDTO.setPassword(user.getPassword());
 
         return userDTO;
     }

@@ -1,9 +1,10 @@
 package com.hardware.api.DTO;
 
+import java.util.Set;
+
 import javax.validation.constraints.Email;
 
 import lombok.Getter;
-
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -18,10 +19,14 @@ public class UserDTO
 
     @Email(message = "Email precisa ser um formato válido")
     private String email;
-    
-    private String password;
 
     private String phone;
 
     private String url;
+
+    private Set<Integer> profiles;
+
+    private String login;
+
+    private String password;
 }

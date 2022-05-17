@@ -34,7 +34,7 @@ public class User extends AbstractEntity
     @Column(name = "phone", length = 75)
     private String phone;
 
-    @Column(name = "url", length = 200)
+    @Column(name = "url", length = 75)
     private String url;
 
     @ElementCollection(fetch = FetchType.EAGER)

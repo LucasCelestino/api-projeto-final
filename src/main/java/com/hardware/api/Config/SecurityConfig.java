@@ -5,7 +5,6 @@ import com.hardware.api.Security.JWTAuthenticationFilter;
 import com.hardware.api.Security.JWTAuthorizationFilter;
 import com.hardware.api.Security.JWTUtil;
 
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,13 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     private UserRepository userRepository;
 
     private static final String[] PUBLIC_MATCHERS = {
+        "/api/v1/users/**",
         "/api/v1/parts/**",
         "/api/v1/brands/**",
+        "/api/v1/budgets/**"
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
+        "/api/v1/users/**",
         "/api/v1/parts/**",
-        "/api/v1/brands/**"
+        "/api/v1/brands/**",
+        "/api/v1/budgets/**"
     };
 
     @Override

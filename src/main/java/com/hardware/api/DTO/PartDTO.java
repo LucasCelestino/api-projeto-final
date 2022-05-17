@@ -28,3 +28,4 @@ public class PartDTO
 
     private Brand brand;
 }
+

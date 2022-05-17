@@ -57,18 +57,6 @@ public class PartService implements ServiceInterface<BrandDTO>
         return null;
     }
 
-    // public List<PartDTO> findByBrand(String brand)
-    // {
-    //     List<Part> parts = partRepository.findByBrandName(brand);
-
-    //     if(parts.isEmpty())
-    //     {
-    //         return partMapper.toDTO(parts);
-    //     }
-
-    //     return null;
-    // }
-
     // @Override
     public PartDTO create(PartDTO partDTO)
     {

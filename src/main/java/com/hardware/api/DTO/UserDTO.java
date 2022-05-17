@@ -2,8 +2,6 @@ package com.hardware.api.DTO;
 
 import java.util.Set;
 
-import javax.validation.constraints.Email;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +15,6 @@ public class UserDTO
 
     private String name;
 
-    @Email(message = "Email precisa ser um formato válido")
     private String email;
 
     private String phone;

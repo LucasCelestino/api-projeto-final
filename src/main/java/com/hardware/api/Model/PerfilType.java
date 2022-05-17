@@ -3,7 +3,7 @@ package com.hardware.api.Model;
 public enum PerfilType
 {
     ADMIN(1, "ROLE_ADMIN"),
-    USER(1, "ROLE_USER");
+    USER(2, "ROLE_USER");
 
     private Integer cod;
     private String descricao;

@@ -7,8 +7,11 @@ import com.hardware.api.DTO.UserDTO;
 import com.hardware.api.Mapper.UserMapper;
 import com.hardware.api.Model.User;
 import com.hardware.api.Repository.UserRepository;
+import com.hardware.api.Security.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +81,18 @@ public class UserService implements ServiceInterface<UserDTO>
         }
 
         return false;
+    }
+
+    public static UserDetailsImpl authenticated()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null)
+        {
+            return (UserDetailsImpl) auth.getPrincipal();
+        }
+        
+        return null;
     }
     
 }

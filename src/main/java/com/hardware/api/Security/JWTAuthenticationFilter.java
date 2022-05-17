@@ -3,6 +3,7 @@ package com.hardware.api.Security;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hardware.api.DTO.CredentialsDTO;
+import com.hardware.api.Model.User;
+import com.hardware.api.Repository.UserRepository;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +25,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 {
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
+    private UserRepository userRepository;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil)
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserRepository userRepository)
     {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,6 +62,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = jwtUtil.generateToken(username);
         response.addHeader("Authentication", "Bearer " + token);
         response.addHeader("access-control-expose-headers","Authorization");
+        User user = userRepository.findByLogin(username);
+        response.setContentType("application/json");
+        response.getWriter().append(this.jsonAuth(token, user));
     }
     
     @Override
@@ -65,6 +73,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setStatus(401);
         response.setContentType("application/json");
         response.getWriter().append(jsonError());
+    }
+
+    private String jsonAuth(String token, User user)
+    {
+        return "{\"token\": \"" + token + "\"" + ", " +
+        "\"username\": \"" + user.getName() + "\", " +
+        "\"profile\": " + user.getProfiles().stream()
+        .map(x -> "\"" + x + "\"")
+        .collect(Collectors.toList()) + "}";
     }
 
     private String jsonError()

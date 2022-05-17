@@ -12,6 +12,7 @@ import com.hardware.api.Service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +53,7 @@ public class BrandController implements ControllerInterface<BrandDTO>
 
     @Override
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<BrandDTO> post(@Valid @RequestBody BrandDTO brandDTO) throws URISyntaxException {
         
         BrandDTO dto = brandService.create(brandDTO);
@@ -63,6 +65,7 @@ public class BrandController implements ControllerInterface<BrandDTO>
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> put(@Valid @RequestBody BrandDTO dto, @PathVariable("id") Long id)
     {
         BrandDTO brandDTO = brandService.findById(id);
@@ -79,6 +82,7 @@ public class BrandController implements ControllerInterface<BrandDTO>
 
     @Override
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
         if(brandService.delete(id))

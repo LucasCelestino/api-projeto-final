@@ -75,5 +75,9 @@ public class UserDetailsImpl implements UserDetails
     {
         return true;
     }
-    
+
+    public boolean hasRole(PerfilType profile)
+    {
+        return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescricao()));
+    }
 }

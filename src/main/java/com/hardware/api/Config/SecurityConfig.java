@@ -1,6 +1,8 @@
 package com.hardware.api.Config;
 
+import com.hardware.api.Repository.UserRepository;
 import com.hardware.api.Security.JWTAuthenticationFilter;
+import com.hardware.api.Security.JWTAuthorizationFilter;
 import com.hardware.api.Security.JWTUtil;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired
@@ -29,18 +33,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final String[] PUBLIC_MATCHERS = {
-        "/api/v1/users/**",
         "/api/v1/parts/**",
         "/api/v1/brands/**",
-        "/api/v1/budgets/**"
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-        "/api/v1/users/**",
         "/api/v1/parts/**",
-        "/api/v1/brands/**",
-        "/api/v1/budgets/**"
+        "/api/v1/brands/**"
     };
 
     @Override
@@ -50,7 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS)
         .permitAll().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().anyRequest().authenticated();
 
-        http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil, userRepository));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
+
     }
 
     @Override

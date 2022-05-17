@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hardware.api.DTO.UserDTO;
+import com.hardware.api.Exception.AuthorizationException;
 import com.hardware.api.Mapper.UserMapper;
 import com.hardware.api.Model.User;
 import com.hardware.api.Repository.UserRepository;
+import com.hardware.api.Security.JWTUtil;
 import com.hardware.api.Security.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +30,30 @@ public class UserService implements ServiceInterface<UserDTO>
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private JWTUtil jwtUtil;
+
     // @Override
     public List<UserDTO> findAll()
     {
         return userMapper.toDTO(userRepository.findAll());
     }
 
-    // @Override
-    public UserDTO findById(Long id)
+    //@Override
+    public UserDTO findById(Long id) throws AuthorizationException 
     {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if(optionalUser.isPresent())
+        if (!jwtUtil.authorized(id))
         {
-            return userMapper.toDTO(optionalUser.get());
+            throw new AuthorizationException("Acesso negado!");
         }
 
+        Optional<User> obj = userRepository.findById(id);
+
+        if (obj.isPresent())
+        {
+            return userMapper.toDTO(obj.get());
+        }
+        
         return null;
     }
 
@@ -94,5 +104,4 @@ public class UserService implements ServiceInterface<UserDTO>
         
         return null;
     }
-    
 }

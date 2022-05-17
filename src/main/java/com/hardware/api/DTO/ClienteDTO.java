@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdminDTO
+public class ClienteDTO
 {
     private Long id;
 
@@ -23,4 +23,8 @@ public class AdminDTO
     private String email;
 
     private String password;
+
+    private String phone;
+
+    private String url;
 }

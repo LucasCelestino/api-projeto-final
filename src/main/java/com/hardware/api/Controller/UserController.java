@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.hardware.api.DTO.UserDTO;
+import com.hardware.api.Exception.AuthorizationException;
 import com.hardware.api.Service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,21 @@ public class UserController implements ControllerInterface<UserDTO>
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        UserDTO userDTO = userService.findById(id);
-        
-        if(userDTO != null)
+        try
         {
-            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        }
+            UserDTO userDTO = userService.findById(id);
+        
+            if(userDTO != null)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+            }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        catch (AuthorizationException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @Override

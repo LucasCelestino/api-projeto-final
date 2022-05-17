@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.hardware.api.DTO.AdminDTO;
-import com.hardware.api.Service.AdminService;
+import com.hardware.api.DTO.ClienteDTO;
+import com.hardware.api.Service.ClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,28 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/api/v1/admins")
-public class AdminController implements ControllerInterface<AdminDTO>
+@RequestMapping("/api/v1/clientes")
+public class ClienteController implements ControllerInterface<ClienteDTO>
 {
 
     @Autowired
-    private AdminService adminService; 
+    private ClienteService clienteService; 
 
     // @Override
     @GetMapping
-    public ResponseEntity<List<AdminDTO>> getAll()
+    public ResponseEntity<List<ClienteDTO>> getAll()
     {
-        return ResponseEntity.status(HttpStatus.OK).body(adminService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAll());
     }
 
     // @Override
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
-        AdminDTO adminDTO = adminService.findById(id);
+        ClienteDTO clienteDTO = clienteService.findById(id);
         
-        if(adminDTO != null)
+        if(clienteDTO != null)
         {
-            return ResponseEntity.status(HttpStatus.OK).body(adminDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(clienteDTO);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -52,9 +52,9 @@ public class AdminController implements ControllerInterface<AdminDTO>
 
     // @Override
     @PostMapping
-    public ResponseEntity<AdminDTO> post(@Valid @RequestBody AdminDTO adminDTO) throws URISyntaxException {
+    public ResponseEntity<ClienteDTO> post(@Valid @RequestBody ClienteDTO clienteDTO) throws URISyntaxException {
         
-        AdminDTO dto = adminService.create(adminDTO);
+        ClienteDTO dto = clienteService.create(clienteDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId())
 				.toUri();
@@ -64,18 +64,18 @@ public class AdminController implements ControllerInterface<AdminDTO>
 
     // @Override
     @PutMapping("/{id}")
-    public ResponseEntity<?> put(@Valid @RequestBody AdminDTO dto, @PathVariable("id") Long id)
+    public ResponseEntity<?> put(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") Long id)
     {
-        AdminDTO adminDTO = adminService.findById(id);
+        ClienteDTO clienteDTO = clienteService.findById(id);
 
-        adminDTO.setName(dto.getName());
-        adminDTO.setEmail(dto.getEmail());
-        adminDTO.setPassword(dto.getPassword());
+        clienteDTO.setName(dto.getName());
+        clienteDTO.setEmail(dto.getEmail());
+        clienteDTO.setPassword(dto.getPassword());
 
 
-        if(adminService.update(adminDTO))
+        if(clienteService.update(clienteDTO))
         {
-            return ResponseEntity.ok(adminDTO);
+            return ResponseEntity.ok(clienteDTO);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -85,7 +85,7 @@ public class AdminController implements ControllerInterface<AdminDTO>
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
-        if(adminService.delete(id))
+        if(clienteService.delete(id))
         {
             return ResponseEntity.ok().build();
         }

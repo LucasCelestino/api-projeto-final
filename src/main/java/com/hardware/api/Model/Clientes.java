@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "admins")
-public class Admin extends AbstractEntity
+@Table(name = "clientes")
+public class Clientes extends AbstractEntity
 {
     @Column(name = "name", length = 75)
     private String name;
@@ -22,4 +22,10 @@ public class Admin extends AbstractEntity
 
     @Column(name = "password", length = 90)
     private String password;
+
+    @Column(name = "phone", length = 75)
+    private String phone;
+
+    @Column(name = "url", length = 200)
+    private String url;
 }

@@ -40,6 +40,18 @@ public class BrandService implements ServiceInterface<BrandDTO>
         return null;
     }
 
+    public BrandDTO findByName(String brand)
+    {
+        Brand optionalBrand = brandRepository.findByBrandName(brand);
+
+        if(optionalBrand != null)
+        {
+            return brandMapper.toDTO(optionalBrand);
+        }
+
+        return null;
+    }
+
     // @Override
     public BrandDTO create(BrandDTO brandDTO)
     {

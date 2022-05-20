@@ -3,10 +3,15 @@ package com.hardware.api.Controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.hardware.api.DTO.BrandDTO;
 import com.hardware.api.DTO.PartDTO;
+import com.hardware.api.Model.Part;
+import com.hardware.api.Repository.PartRepository;
+import com.hardware.api.Service.BrandService;
 import com.hardware.api.Service.PartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +36,13 @@ public class PartController implements ControllerInterface<PartDTO>
 {
 
     @Autowired
-    private PartService partService; 
+    private PartService partService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private PartRepository partRepository;
 
     @Override
     @GetMapping
@@ -54,6 +65,26 @@ public class PartController implements ControllerInterface<PartDTO>
         if(partDTO != null)
         {
             return ResponseEntity.status(HttpStatus.OK).body(partDTO);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @GetMapping("/brands/{brand}")
+    public ResponseEntity<?> getByBrand(@PathVariable("brand") String brand) {
+        
+        BrandDTO brandDTO = brandService.findByName(brand);
+
+        if(brandDTO != null)
+        {
+            Stream<Part> parts = partService.findByBrandName(brandDTO.getId());
+
+            if(parts != null)
+            {
+                return ResponseEntity.ok(parts);
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

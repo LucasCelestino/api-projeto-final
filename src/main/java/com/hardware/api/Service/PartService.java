@@ -3,6 +3,7 @@ package com.hardware.api.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.hardware.api.DTO.BrandDTO;
 import com.hardware.api.DTO.PartDTO;
@@ -13,6 +14,7 @@ import com.hardware.api.Repository.PartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,6 +57,18 @@ public class PartService implements ServiceInterface<BrandDTO>
         }
 
         return null;
+    }
+
+    public Stream<Part> findByBrandName(Long brand)
+    {
+        List<Part> optionalBrand = partRepository.findPartByBrand(brand);
+
+        if(optionalBrand.isEmpty())
+        {
+            return null;
+        }
+
+        return optionalBrand.stream().distinct();
     }
 
     // @Override

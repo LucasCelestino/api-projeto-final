@@ -40,6 +40,18 @@ public class BudgetService implements ServiceInterface<BudgetDTO>
         return null;
     }
 
+    public List<BudgetDTO> findBudgetByUser(Long user)
+    {
+        List<Budget> listBudgets = budgetRepository.findBudgetByUser(user);
+
+        if(listBudgets.isEmpty())
+        {
+            return null;
+        }
+
+        return budgetMapper.toDTO(listBudgets);
+    }
+
     // @Override
     public BudgetDTO create(BudgetDTO budgetDTO)
     {

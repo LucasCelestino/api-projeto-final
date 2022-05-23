@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/api/v1/brands")
 public class BrandController implements ControllerInterface<BrandDTO>
@@ -32,14 +36,23 @@ public class BrandController implements ControllerInterface<BrandDTO>
     private BrandService brandService; 
 
     @Override
-    @GetMapping
+    @GetMapping(produces = "application/json")
+    @ApiResponse(responseCode = "200", description = "Retorna uma lista com todas as marcas")
+    @Operation(summary = "Retorna uma lista de marcas")
     public ResponseEntity<List<BrandDTO>> getAll()
     {
         return ResponseEntity.status(HttpStatus.OK).body(brandService.findAll());
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Retorna uma marca única pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Retorna uma marca única")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         BrandDTO brandDTO = brandService.findById(id);
         
@@ -54,6 +67,12 @@ public class BrandController implements ControllerInterface<BrandDTO>
     @Override
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Cria uma marca"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação")
+    })
+    @Operation(summary = "Cria uma marca")
     public ResponseEntity<BrandDTO> post(@Valid @RequestBody BrandDTO brandDTO) throws URISyntaxException {
         
         BrandDTO dto = brandService.create(brandDTO);
@@ -64,8 +83,15 @@ public class BrandController implements ControllerInterface<BrandDTO>
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Atualiza e retorna a marca atualizada"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Atualiza uma marca única")
     public ResponseEntity<?> put(@Valid @RequestBody BrandDTO dto, @PathVariable("id") Long id)
     {
         BrandDTO brandDTO = brandService.findById(id);
@@ -83,6 +109,13 @@ public class BrandController implements ControllerInterface<BrandDTO>
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Deleta uma marca única pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Deleta uma marca única")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
         if(brandService.delete(id))

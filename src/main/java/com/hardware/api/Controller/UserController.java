@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController implements ControllerInterface<UserDTO>
@@ -33,20 +37,29 @@ public class UserController implements ControllerInterface<UserDTO>
     private UserService userService; 
 
     @Override
-    @GetMapping
+    @GetMapping(produces = "application/json")
+    @ApiResponse(responseCode = "200", description = "Retorna uma lista com todos os usuários")
+    @Operation(summary = "Retorna uma lista de usuários")
     public ResponseEntity<List<UserDTO>> getAll()
     {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @Operation(summary = "Retorna um usuário único")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Retorna um usuário único pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         try
         {
             UserDTO userDTO = userService.findById(id);
         
-            if(userDTO != null)
+            if(userDTO == null)
             {
                 return ResponseEntity.status(HttpStatus.OK).body(userDTO);
             }
@@ -61,6 +74,12 @@ public class UserController implements ControllerInterface<UserDTO>
 
     @Override
     @PostMapping
+    @Operation(summary = "Cria um usuário")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Cria um usuário"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação")
+    })
     public ResponseEntity<UserDTO> post(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         
         UserDTO dto = userService.create(userDTO);
@@ -71,7 +90,14 @@ public class UserController implements ControllerInterface<UserDTO>
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(dto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
+    @Operation(summary = "Atualiza um usuário único")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Atualiza e retorna o usuário atualizado"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
     public ResponseEntity<?> put(@Valid @RequestBody UserDTO dto, @PathVariable("id") Long id)
     {
         UserDTO userDTO = userService.findById(id);
@@ -93,6 +119,13 @@ public class UserController implements ControllerInterface<UserDTO>
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Deleta um usuário único")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Deleta um usuário único pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
         if(userService.delete(id))

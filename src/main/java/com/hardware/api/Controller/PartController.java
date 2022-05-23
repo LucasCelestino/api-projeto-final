@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import com.hardware.api.DTO.BrandDTO;
 import com.hardware.api.DTO.PartDTO;
 import com.hardware.api.Model.Part;
-import com.hardware.api.Repository.PartRepository;
 import com.hardware.api.Service.BrandService;
 import com.hardware.api.Service.PartService;
 
@@ -30,6 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/api/v1/parts")
 public class PartController implements ControllerInterface<PartDTO>
@@ -41,24 +44,32 @@ public class PartController implements ControllerInterface<PartDTO>
     @Autowired
     private BrandService brandService;
 
-    @Autowired
-    private PartRepository partRepository;
-
     @Override
-    @GetMapping
+    @GetMapping(produces = "application/json")
+    @ApiResponse(responseCode = "200", description = "Retorna uma lista com todos as peças")
+    @Operation(summary = "Retorna uma lista de peças")
     public ResponseEntity<List<PartDTO>> getAll()
     {
         return ResponseEntity.status(HttpStatus.OK).body(partService.findAll());
     }
 
-    @GetMapping("/page")
+    @GetMapping(value = "/page", produces = "application/json")
+    @ApiResponse(responseCode = "200", description = "Retorna uma lista com todos as peças paginadas")
+    @Operation(summary = "Retorna uma lista de peças paginadas")
 	public ResponseEntity<Page<PartDTO>> getAll(Pageable pageable)
     {
 		return ResponseEntity.ok(partService.findAll(pageable));
 	}
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Retorna uma peça única pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Retorna uma peça única")
     public ResponseEntity<?> get(@PathVariable("id") Long id) {
         PartDTO partDTO = partService.findById(id);
         
@@ -70,7 +81,14 @@ public class PartController implements ControllerInterface<PartDTO>
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/brands/{brand}")
+    @GetMapping(value = "/brands/{brand}", produces = "application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Retorna todas as peças de uma marca específica"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Marca informada não encontrada")
+    })
+    @Operation(summary = "Retorna todas as peças de uma marca específica")
     public ResponseEntity<?> getByBrand(@PathVariable("brand") String brand) {
         
         BrandDTO brandDTO = brandService.findByName(brand);
@@ -93,6 +111,12 @@ public class PartController implements ControllerInterface<PartDTO>
     @Override
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Cria uma peça"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação")
+    })
+    @Operation(summary = "Cria uma marca")
     public ResponseEntity<PartDTO> post(@Valid @RequestBody PartDTO partDTO) throws URISyntaxException {
         
         PartDTO dto = partService.create(partDTO);
@@ -104,8 +128,15 @@ public class PartController implements ControllerInterface<PartDTO>
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Atualiza e retorna a peça atualizada"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Atualiza uma peça única")
     public ResponseEntity<?> put(@Valid @RequestBody PartDTO dto, @PathVariable("id") Long id)
     {
         PartDTO partDTO = partService.findById(id);
@@ -126,6 +157,13 @@ public class PartController implements ControllerInterface<PartDTO>
     @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Deleta uma peça única pelo id"),
+        @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
+        @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação"),
+        @ApiResponse(responseCode = "404", description = "Id informado não encontrado")
+    })
+    @Operation(summary = "Deleta uma peça única")
     public ResponseEntity<?> delete(@PathVariable("id") Long id)
     {
         if(partService.delete(id))

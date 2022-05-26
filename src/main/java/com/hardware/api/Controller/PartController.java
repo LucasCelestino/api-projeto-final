@@ -116,7 +116,7 @@ public class PartController implements ControllerInterface<PartDTO>
         @ApiResponse(responseCode = "401", description = "Você não está autenticado"),
         @ApiResponse(responseCode = "403", description = "Você não tem permissão para executar essa ação")
     })
-    @Operation(summary = "Cria uma marca")
+    @Operation(summary = "Cria uma peça")
     public ResponseEntity<PartDTO> post(@Valid @RequestBody PartDTO partDTO) throws URISyntaxException {
         
         PartDTO dto = partService.create(partDTO);

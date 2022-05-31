@@ -20,6 +20,9 @@ public class SwaggerConfig
         .version("v0.0.1")
         .contact(new Contact()
         .name("Lucas Celestino Alves Pereira").email("lucascap899@gmail.com"))
+        .name("Gabriel Marmore Piraja").email("gabriel.piraja@fatec.sp.gov.br"))
+        .name("Wilson Iglesias Trindade Oliveira").email("wilson.oliveira15@fatec.sp.gov.br"))
+        .name("Christian Alves Pinheiro").email("christian.alves@fatec.sp.gov.br"))
         .license(new License()
         .name("Apache 2.0").url("http://springdoc.org")));
     }
